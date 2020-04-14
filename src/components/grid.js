@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Item from './item';
 import styled, { css } from 'styled-components';
 
@@ -17,27 +17,58 @@ const Container = styled.div`
         }
     `;
 
-const Grid = (props) => {
-    let rows = props.rows;
-    let cols = props.cols;
+class Grid extends Component {
+    constructor(props) {
+        super(props);
 
-    const message = <p>Select grid dimensions</p>
-
-    const items = [];
-    const selected = [];
-    for(let i = 0; i < (rows * cols); i++){
-        selected.push(false);
-        items.push(<Item key={i} selected={selected[i]}>{i + 1}</Item>);
+        this.state = {
+            items: [],
+            selected: []
+        };
     }
 
-    return (
-        <>
-            <Container className={"container"} rows={rows} cols={cols}>
-                {items.length !== 0 ? items : message}
-            </Container>
-            <br />
-        </>
-    )
+    /**
+     * Grid dimensions depend on the props for rows and cols, that's why I'm using the memoization helper
+     * @param {Object} props Component props
+     * @returns {Object} New state
+     */
+    static getDerivedStateFromProps(props) {
+        const rows = props.rows;
+        const cols = props.cols;
+
+        const items = [];
+        const selected = [];
+
+        for(let row = 0; row < rows; row++){
+            let rowItems = [];
+            let rowSelected = [];
+            for(let col = 0; col < cols; col++) {
+                rowSelected.push(false);
+                rowItems.push(<Item key={row + "x" + col} selected={rowSelected[col]}></Item>);
+            }
+
+            items.push(rowItems);
+            selected.push(rowSelected);
+        }
+
+        return {
+            items,
+            selected
+        }
+    }
+
+    render() {
+        const message = <p>Select grid dimensions or click on random</p>;
+
+        return (
+            <>
+                <Container className={"container"} rows={this.props.rows} cols={this.props.cols}>
+                    {this.state.items.length !== 0 ? this.state.items : message}
+                </Container>
+                <br />
+            </>
+        )
+    }
 }
 
 export default Grid;

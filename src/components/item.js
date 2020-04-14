@@ -8,8 +8,8 @@ const GridItem = styled.div`
         background-color: #ddd;
         color: #111;
         font-size: 14px;
-        width: 15px;
-        height: 15px;
+        width: 5px;
+        height: 5px;
 
         ${props => 
             props.selected &&
