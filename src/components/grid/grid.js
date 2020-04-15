@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import Item from './item';
+import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
+
+import { Item } from './item';
+import { updateSelectedCell } from './actions';
 
 const Container = styled.div`
         display: grid;
@@ -45,6 +48,7 @@ class Grid extends Component {
             for(let col = 0; col < cols; col++) {
                 rowSelected.push(false);
                 rowItems.push(<Item key={row + "x" + col} selected={rowSelected[col]}></Item>);
+                // rowItems.push(<p>Hello</p>);
             }
 
             items.push(rowItems);
@@ -71,4 +75,8 @@ class Grid extends Component {
     }
 }
 
-export default Grid;
+const mapStateToProps = ({ grid }) => {
+    return grid;
+}
+
+export default connect(mapStateToProps, { updateSelectedCell })(Grid);

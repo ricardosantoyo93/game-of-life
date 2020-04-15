@@ -19,9 +19,17 @@ const GridItem = styled.div`
         };
     `
 
+/**
+ * Individual item representing a single cell
+ * @param {Object} props 
+ */
 const Item = (props) => {
     const [selected, setSelected] = useState(props.selected);
 
+    /**
+     * Click handler to change selection state
+     * ! Selected state has to update parent array (this.state.selected), consider implementing Redux
+     */
     const clickHandler = () => {
         setSelected(!selected);
     };

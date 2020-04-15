@@ -1,0 +1,3 @@
+export default {
+    GRID_UPDATE_SELECTED_CELL: 'GRID_UPDATE_SELECTED_CELL'
+};

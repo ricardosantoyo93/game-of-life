@@ -1,5 +1,4 @@
-import Grid from './grid';
-import Item from './item';
+import { Grid, Item } from './grid';
 
 export { Grid, Item };
 export default { Grid, Item };

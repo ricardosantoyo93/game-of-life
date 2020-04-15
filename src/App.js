@@ -39,7 +39,9 @@ const Input = styled.input`
   text-transform: uppercase;
   text-align: center;
 `
-
+/**
+ * Main component
+ */
 class App extends Component {
   constructor() {
     super();
@@ -53,6 +55,9 @@ class App extends Component {
     };
   }
 
+  /**
+   * Updates the state on the current values for rows and cols inputs
+   */
   handleCreateClick = () => {
     const rowVal = this.rowsRef.current.value !== "" ? this.rowsRef.current.value : 1;
     const colVal = this.colsRef.current.value !== "" ? this.colsRef.current.value : 1;
@@ -67,6 +72,9 @@ class App extends Component {
     });
   };
 
+  /**
+   * Sets random values for the rows and cols, then updates the state
+   */
   handleRandomClick = () => {
     // Max = 40x50, Min = 15x20
     const rowVal = Math.floor((Math.random() * 25) + 15);
@@ -95,9 +103,11 @@ class App extends Component {
 
   render() {
 
+    debugger;
+
     return (
       <div className="App">
-        <header className="App-header">
+        <div className="App-container">
           <Grid rows={this.state.rows} cols={this.state.cols} random={this.state.random}/>
           <br />
           <span>
@@ -113,7 +123,7 @@ class App extends Component {
             <DefaultBtn type={"button"} onClick={()=> this.createSpecificGrid(40, 50)}>40 x 50</DefaultBtn>
             <DefaultBtn type={"button"} onClick={this.handleRandomClick}>Random</DefaultBtn>
           </span>
-        </header>
+        </div>
       </div>
     );
   }
