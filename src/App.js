@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import { Grid } from './components';
+import gridActions from './components/grid/actions';
 
 import './App.css';
 
@@ -51,8 +53,34 @@ class App extends Component {
     this.state = {
       rows: 0,
       cols: 0,
-      random: false
+      render: false
     };
+  }
+
+  /**
+   * Builds the dead array and saves it into the store, then renders grid
+   */
+  saveGridToStore = async () => {
+    const { rows, cols } = this.state;
+    const { setDeadArray } = this.props;
+
+    const dead = [];
+
+    for(let row = 0; row < rows; row++){
+        let rowDead = [];
+        for(let col = 0; col < cols; col++) {
+            rowDead.push(false);
+        }
+
+        dead.push(rowDead);
+    }
+
+    await setDeadArray(dead);
+
+    this.setState({
+      ...this.state,
+      render: true
+    })
   }
 
   /**
@@ -66,10 +94,10 @@ class App extends Component {
     this.colsRef.current.value = colVal;
 
     this.setState({
-      ...this.state,
       rows: rowVal,
-      cols: colVal
-    });
+      cols: colVal,
+      render: false
+    }, this.saveGridToStore);
   };
 
   /**
@@ -86,29 +114,31 @@ class App extends Component {
     this.setState({
       rows: rowVal,
       cols: colVal,
-      random: true
-    })
+      render: false
+    }, this.saveGridToStore)
   };
 
+  /**
+   * Creates a grid from given values
+   */
   createSpecificGrid = (rows, cols) => {
     this.rowsRef.current.value = rows;
     this.colsRef.current.value = cols;
 
     this.setState({
-      ...this.state,
       rows,
-      cols
-    })
+      cols,
+      render: false
+    }, this.saveGridToStore)
   }
 
   render() {
-
-    debugger;
+    const message = <p>Select grid dimensions or click on random</p>;
 
     return (
       <div className="App">
         <div className="App-container">
-          <Grid rows={this.state.rows} cols={this.state.cols} random={this.state.random}/>
+          { this.state.render ? <Grid /> : message}
           <br />
           <span>
             <Input ref={this.rowsRef} type={"number"} min={"1"} max={"20"} placeholder={"Rows"} /> 
@@ -129,4 +159,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = () => {
+  return {};
+}
+
+export default connect(mapStateToProps, gridActions)(App);

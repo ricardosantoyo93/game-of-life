@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import styled, { css } from 'styled-components';
+import { connect } from 'react-redux';
 
 import { Item } from './item';
-import { updateSelectedCell } from './actions';
+import gridActions from './actions';
 
 const Container = styled.div`
         display: grid;
@@ -20,63 +20,35 @@ const Container = styled.div`
         }
     `;
 
-class Grid extends Component {
-    constructor(props) {
-        super(props);
+const Grid = ({ dead }) => {
+    const items = [];
+    const rows = dead.length;
+    const cols = dead[0].length;
 
-        this.state = {
-            items: [],
-            selected: []
-        };
-    }
-
-    /**
-     * Grid dimensions depend on the props for rows and cols, that's why I'm using the memoization helper
-     * @param {Object} props Component props
-     * @returns {Object} New state
-     */
-    static getDerivedStateFromProps(props) {
-        const rows = props.rows;
-        const cols = props.cols;
-
-        const items = [];
-        const selected = [];
-
-        for(let row = 0; row < rows; row++){
-            let rowItems = [];
-            let rowSelected = [];
-            for(let col = 0; col < cols; col++) {
-                rowSelected.push(false);
-                rowItems.push(<Item key={row + "x" + col} selected={rowSelected[col]}></Item>);
-                // rowItems.push(<p>Hello</p>);
-            }
-
-            items.push(rowItems);
-            selected.push(rowSelected);
+    for(let row = 0; row < dead.length; row++){
+        let rowItems = [];
+        for(let col = 0; col < dead[row].length; col++) {
+            rowItems.push(<Item key={row + "x" + col} options={{row, col}} dead={dead[row][col]}></Item>);
         }
 
-        return {
-            items,
-            selected
-        }
+        items.push(rowItems);
     }
 
-    render() {
-        const message = <p>Select grid dimensions or click on random</p>;
-
-        return (
-            <>
-                <Container className={"container"} rows={this.props.rows} cols={this.props.cols}>
-                    {this.state.items.length !== 0 ? this.state.items : message}
-                </Container>
-                <br />
-            </>
-        )
-    }
+    return (
+        <>
+            <Container className={"container"} rows={rows} cols={cols}>
+                { items }
+            </Container>
+            <br />
+        </>
+    )
 }
 
 const mapStateToProps = ({ grid }) => {
-    return grid;
+    const { dead } = grid;
+    return {
+        dead
+    };
 }
 
-export default connect(mapStateToProps, { updateSelectedCell })(Grid);
+export default connect(mapStateToProps, gridActions)(Grid);
