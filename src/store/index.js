@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 
-import combinedReducers from '../components/reducer';
+import combinedReducers from './reducer';
 import initialState from './initial-state';
 
 const logger = createLogger();

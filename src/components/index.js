@@ -1,4 +1,5 @@
 import { Grid, Item } from './grid';
+import CoreReducer from './reducer';
 
-export { Grid, Item };
-export default { Grid, Item };
+export { Grid, Item, CoreReducer };
+export default { Grid, Item, CoreReducer };

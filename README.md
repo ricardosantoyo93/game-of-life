@@ -10,9 +10,13 @@ The game is a zero-player game, meaning that its evolution is determined by its 
 3. Any live cell with more than three live neighbours dies, as if by overpopulation.
 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
-## Available Scripts
+## Running the project
 
-In the project directory, you can run:
+First install all the needed packages
+
+### `npm install`
+
+Then, to run the project
 
 ### `npm start`
 

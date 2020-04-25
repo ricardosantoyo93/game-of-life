@@ -1,9 +1,15 @@
-import { GridReducer } from './grid';
+import types from './action-types';
 
-const reducer = (state = {}, action) => {
-    return {
-        grid: GridReducer(state.grid, action)
-    };
+const CoreReducer = (state = {}, { type }) => {
+    switch(type) {
+        case types.CORE_TOGGLE_RUN:
+            return {
+                ...state,
+                run: !state.run
+            }
+        default:
+            return state;
+    }
 };
 
-export default reducer;
+export default CoreReducer;

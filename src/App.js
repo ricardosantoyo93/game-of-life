@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import worker from 'workerize-loader!./workers/worker';
 
 import { Grid } from './components';
 import gridActions from './components/grid/actions';
 
 import './App.css';
+
+const workerInstance = worker();
 
 const Button = styled.button`
   background: #088;
@@ -57,6 +61,22 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    workerInstance.addEventListener('message', ({ data }) => {
+      const { method, grid } = data;
+      switch(method) {
+        case 'update-grid':
+          this.props.setDeadArray(grid);
+          break;
+        case 'worker-stopped':
+          console.log(`%c Worker was stopped`, 'color: yellow; font-size: bold;');
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
   /**
    * Builds the dead array and saves it into the store, then renders grid
    */
@@ -87,8 +107,13 @@ class App extends Component {
    * Updates the state on the current values for rows and cols inputs
    */
   handleCreateClick = () => {
-    const rowVal = this.rowsRef.current.value !== "" ? this.rowsRef.current.value : 1;
-    const colVal = this.colsRef.current.value !== "" ? this.colsRef.current.value : 1;
+    let rowVal = this.rowsRef.current.value !== "" ? this.rowsRef.current.value : 1;
+    let colVal = this.colsRef.current.value !== "" ? this.colsRef.current.value : 1;
+
+    if(rowVal > 50 || colVal > 50) {
+      alert('Maximum value of 50');
+      return
+    }
 
     this.rowsRef.current.value = rowVal;
     this.colsRef.current.value = colVal;
@@ -133,25 +158,26 @@ class App extends Component {
   }
 
   render() {
-    const message = <p>Select grid dimensions or click on random</p>;
+    const message = <p>Select grid dimensions</p>;
+    const run = this.props.run;
 
     return (
       <div className="App">
         <div className="App-container">
-          { this.state.render ? <Grid /> : message}
+          { this.state.render ? <Grid worker={ workerInstance } /> : message}
           <br />
           <span>
-            <Input ref={this.rowsRef} type={"number"} min={"1"} max={"20"} placeholder={"Rows"} /> 
+            <Input disabled={run} ref={this.rowsRef} type={"number"} min={"1"} max={"50"} placeholder={"Rows"} /> 
             x 
-            <Input ref={this.colsRef} type={"number"} min={"1"} max={"20"} placeholder={"Columns"} />
+            <Input disabled={run} ref={this.colsRef} type={"number"} min={"1"} max={"50"} placeholder={"Columns"} />
             <Button type={"button"} onClick={this.handleCreateClick}>Create Grid</Button>
           </span>
           <br />
           <span>
-            <DefaultBtn type={"button"} onClick={()=> this.createSpecificGrid(20, 30) }>20 x 30</DefaultBtn>
-            <DefaultBtn type={"button"} onClick={()=> this.createSpecificGrid(30, 40)}>30 x 40</DefaultBtn>
-            <DefaultBtn type={"button"} onClick={()=> this.createSpecificGrid(40, 50)}>40 x 50</DefaultBtn>
-            <DefaultBtn type={"button"} onClick={this.handleRandomClick}>Random</DefaultBtn>
+            <DefaultBtn disabled={run} type={"button"} onClick={()=> this.createSpecificGrid(20, 30) }>20 x 30</DefaultBtn>
+            <DefaultBtn disabled={run} type={"button"} onClick={()=> this.createSpecificGrid(30, 40)}>30 x 40</DefaultBtn>
+            <DefaultBtn disabled={run} type={"button"} onClick={()=> this.createSpecificGrid(40, 50)}>40 x 50</DefaultBtn>
+            <DefaultBtn disabled={run} type={"button"} onClick={this.handleRandomClick}>Random</DefaultBtn>
           </span>
         </div>
       </div>
@@ -159,8 +185,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = ({ core }) => {
+  return {
+    run: core.run
+  };
 }
 
 export default connect(mapStateToProps, gridActions)(App);
