@@ -1,14 +1,19 @@
 // Interval instance
 let interval = null;
 
+/**
+ * Takes an original grid, calculates each iteration of each cell, and then sends a message to the main thread to update the grid
+ * @param {Array<Array<Boolean>>} grid Original grid
+ */
 export const calculateNewGrid = (grid) => {
     let baseGrid = [...grid];
-    interval = setInterval(async () => {
+    interval = setInterval(() => {
         const newGrid = arrayClone(baseGrid);
 
         for(let row = 0; row < baseGrid.length; row++) {
             for(let col = 0; col < baseGrid[row].length; col ++) {
-                let alive = await checkNeighbourCells(baseGrid, row, col);
+
+                let alive = getAliveNeighbourCells(baseGrid, row, col);
 
                 // Alive conditions
                 if(baseGrid[row][col] === true) {
@@ -32,7 +37,14 @@ export const calculateNewGrid = (grid) => {
     }, 500);
 }
 
-const checkNeighbourCells = (grid, row, col) => {
+/**
+ * Given a position in a grid, checks the amount of living cells in its neighborhood
+ * @param {Array<Array<Boolean>>} grid The original grid
+ * @param {Integer} row Current row
+ * @param {Integer} col Current column
+ * @return {Integer} Amount of living cells
+ */
+const getAliveNeighbourCells = (grid, row, col) => {
     let alive = 0;
 
     for(let tmpRow = -1; tmpRow < 2; tmpRow++){
@@ -52,25 +64,26 @@ const checkNeighbourCells = (grid, row, col) => {
     return alive;
 }
 
-function arrayClone( arr ) {
-
-    var i, copy;
-
-    if( Array.isArray( arr ) ) {
-        copy = arr.slice( 0 );
-        for( i = 0; i < copy.length; i++ ) {
+/**
+ * Creates a clone of an array of arrays
+ * @param {Array<Array<Any>>} arr 
+ * @return {Array<Array<Any>>}
+ */
+function arrayClone(arr) {
+    if(Array.isArray(arr)){
+        const copy = arr.slice(0);
+        for(let i = 0; i < copy.length; i++ ) {
             copy[ i ] = arrayClone( copy[ i ] );
         }
         return copy;
-    } else if( typeof arr === 'object' ) {
-        // eslint-disable-next-line no-throw-literal
-        throw 'Cannot clone array containing an object!';
     } else {
         return arr;
     }
-
 }
 
+/**
+ * Clears the interval and stops the worker
+ */
 export const stopWorker = () => {
     clearInterval(interval);
     postMessage({ method: 'worker-stopped' });
