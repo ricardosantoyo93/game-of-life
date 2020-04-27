@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!./workers/worker';
@@ -20,6 +20,10 @@ const Button = styled.button`
   padding: 0.25em 1em;
   font-size: 16px;
   text-transform: uppercase;
+
+  &:disabled {
+    background-color: gray;
+  }
 `
 
 const DefaultBtn = styled.button`
@@ -31,6 +35,10 @@ const DefaultBtn = styled.button`
   padding: 0.25em 1em;
   font-size: 16px;
   text-transform: uppercase;
+
+  &:disabled {
+    background-color: gray;
+  }
 `
 
 const Input = styled.input`
@@ -44,6 +52,11 @@ const Input = styled.input`
   width: 100px;
   text-transform: uppercase;
   text-align: center;
+
+  &:disabled {
+    background-color: gray;
+  }
+}
 `
 /**
  * Main component
@@ -66,7 +79,7 @@ class App extends Component {
       const { method, grid } = data;
       switch(method) {
         case 'update-grid':
-          this.props.setDeadArray(grid);
+          this.props.setNewGrid(grid);
           break;
         case 'worker-stopped':
           console.log(`%c Worker was stopped`, 'color: yellow; font-size: bold;');
@@ -78,24 +91,24 @@ class App extends Component {
   }
 
   /**
-   * Builds the dead array and saves it into the store, then renders grid
+   * Builds the grid and saves it into the store, then renders grid
    */
   saveGridToStore = async () => {
     const { rows, cols } = this.state;
-    const { setDeadArray } = this.props;
+    const { setNewGrid } = this.props;
 
-    const dead = [];
+    const alive = [];
 
     for(let row = 0; row < rows; row++){
-        let rowDead = [];
+        let rowAlive = [];
         for(let col = 0; col < cols; col++) {
-            rowDead.push(false);
+            rowAlive.push(false);
         }
 
-        dead.push(rowDead);
+        alive.push(rowAlive);
     }
 
-    await setDeadArray(dead);
+    await setNewGrid(alive);
 
     this.setState({
       ...this.state,
@@ -170,7 +183,7 @@ class App extends Component {
             <Input disabled={run} ref={this.rowsRef} type={"number"} min={"1"} max={"50"} placeholder={"Rows"} /> 
             x 
             <Input disabled={run} ref={this.colsRef} type={"number"} min={"1"} max={"50"} placeholder={"Columns"} />
-            <Button type={"button"} onClick={this.handleCreateClick}>Create Grid</Button>
+            <Button disabled={run} type={"button"} onClick={this.handleCreateClick}>Create Grid</Button>
           </span>
           <br />
           <span>

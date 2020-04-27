@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -22,26 +22,48 @@ const Container = styled.div`
     `;
 
 const Button = styled.button`
-    background: #498;
+    background: #4C8;
     border-radius: 3px;
-    border: 2px solid #498;
+    border: 2px solid #4C8;
     color: white;
     margin: 0 1em;
     padding: 0.25em 1em;
     font-size: 16px;
     text-transform: uppercase;
+
+    ${props => props.stop &&
+        css`
+            background: #844;
+            border-color: #844
+        `
+    }
   `
 
-const Grid = ({ run, toggleRun , dead, worker }) => {
+const Random = styled.button`
+  background: #448;
+  border-radius: 3px;
+  border: 2px solid #448;
+  color: white;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+  font-size: 16px;
+  text-transform: uppercase;
+
+  &:disabled {
+    background-color: gray;
+  }
+`
+
+const Grid = ({ run, toggleRun , grid, worker, setNewGrid }) => {
     const items = [];
-    const rows = dead.length;
-    const cols = dead[0].length;
+    const rows = grid.length;
+    const cols = grid[0].length;
     const [start, setStart] = useState(run);
 
-    for(let row = 0; row < dead.length; row++){
+    for(let row = 0; row < grid.length; row++){
         let rowItems = [];
-        for(let col = 0; col < dead[row].length; col++) {
-            rowItems.push(<Item key={row + "x" + col} options={{row, col}} dead={dead[row][col]}></Item>);
+        for(let col = 0; col < grid[row].length; col++) {
+            rowItems.push(<Item key={row + "x" + col} options={{row, col}} alive={grid[row][col]}></Item>);
         }
 
         items.push(rowItems);
@@ -50,7 +72,7 @@ const Grid = ({ run, toggleRun , dead, worker }) => {
     const startExecution = () => {
         setStart(!start);
         toggleRun();
-        worker.calculateNewGrid(dead);
+        worker.calculateNewGrid(grid);
     }
 
     const stopExecution = () => {
@@ -59,24 +81,40 @@ const Grid = ({ run, toggleRun , dead, worker }) => {
         worker.stopWorker()
     }
 
+    const randomizeCells = () => {
+        const items = [];
+
+        for(let row = 0; row < grid.length; row++){
+            let rowItems = [];
+            for(let col = 0; col < grid[row].length; col++) {
+                rowItems.push(Math.random() >= 0.5);
+            }
+    
+            items.push(rowItems);
+        }
+
+        setNewGrid(items);
+    }
+
     return (
         <>
             <Container className={"container"} rows={rows} cols={cols}>
                 { items }
             </Container>
             <br />
-            { !start ? <Button onClick={ () => startExecution() }>Start</Button> : '' }
-            { start ? <Button onClick={ () => stopExecution() }>Stop</Button> : '' }
+            <span>
+                <Button onClick={ () => start ? stopExecution() : startExecution() } stop={run} >{start ? 'Stop' : 'Start'}</Button>
+                <Random onClick={ () => randomizeCells()} disabled={run} >Randomize</Random>
+            </span>
         </>
     )
 }
 
 const mapStateToProps = ({ core, grid }) => {
-    const { dead } = grid;
     const { run } = core;
     return {
         run,
-        dead
+        grid
     };
 }
 

@@ -2,7 +2,5 @@ export default {
     core: {
       run: false  
     },
-    grid: {
-        dead: []
-    }
+    grid: []
 };

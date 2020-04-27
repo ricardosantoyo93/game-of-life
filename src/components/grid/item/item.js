@@ -15,7 +15,7 @@ const Cell = styled.div`
         height: 5px;
 
         ${props => 
-            props.dead &&
+            props.alive &&
             css`
                 background-color: #333;
             `
@@ -26,32 +26,35 @@ const Cell = styled.div`
  * Individual item representing a single cell
  * @param {Object} props 
  * @param {Object} props.options Number of rows and columns
- * @param {Array<Array<Boolean>>} props.deadArray A matrix of boolean values for each cell
- * @param {Function} props.toggleDeadCell Action to toggle the value of an specific cell
+ * @param {Array<Array<Boolean>>} props.aliveArray A matrix of boolean values for each cell
+ * @param {Function} props.toggleCell Action to toggle the value of an specific cell
  */
-const Item = ({ options, deadArray, toggleDeadCell }) => {
+const Item = ({ options, aliveArray, toggleCell, run }) => {
     const { row, col } = options;
-    const [dead, setDead] = useState(deadArray[row][col]);
+    const [alive, setAlive] = useState(aliveArray[row][col]);
 
-    const deadCell = deadArray[row][col];
+    const aliveCell = aliveArray[row][col];
 
     /**
      * Click handler to change selection state
      */
     const clickHandler = () => {
-        toggleDeadCell(row, col);
-        setDead(!dead);
+        if(!run) {
+            toggleCell(row, col);
+            setAlive(!alive);
+        }
     };
 
     return (
-        <Cell onClick={clickHandler} dead={deadCell}></Cell>
+        <Cell onClick={clickHandler} alive={aliveCell}></Cell>
     );
 }
 
-const mapStateToProps = ({ grid }) => {
-    const { dead } = grid;
+const mapStateToProps = ({ core, grid }) => {
+    const { run } = core;
     return {
-        deadArray: dead
+        run,
+        aliveArray: grid
     }
 };
 

@@ -6,9 +6,9 @@ import types from './action-types';
  * @param {Integer} row 
  * @param {Integer} col 
  */
-const toggleDeadCell = (row, col) => {
+const toggleCell = (row, col) => {
     return {
-        type: types.GRID_TOGGLE_DEAD_CELL,
+        type: types.GRID_TOGGLE_ALIVE_CELL,
         payload: {
             row,
             col
@@ -18,13 +18,13 @@ const toggleDeadCell = (row, col) => {
 
 /**
  * Sets a matrix of boolean values representing the state of each cell
- * @param {Array<Array<Boolean>>} dead 
+ * @param {Array<Array<Boolean>>} grid 
  */
-const setDeadArray = (dead) => {
+const setNewGrid = (grid) => {
     return {
-        type: types.GRID_SET_DEAD_ARRAY,
-        payload: dead
+        type: types.GRID_SET_ALIVE_ARRAY,
+        payload: grid
     }
 };
 
-export default { toggleDeadCell, setDeadArray };
+export default { toggleCell, setNewGrid };

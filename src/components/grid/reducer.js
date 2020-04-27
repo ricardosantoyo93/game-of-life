@@ -2,21 +2,15 @@ import types from './action-types';
 
 const GridReducer = (state, { type, payload }) => {
     switch(type) {
-        case types.GRID_TOGGLE_DEAD_CELL:
+        case types.GRID_TOGGLE_ALIVE_CELL:
             const { row, col } = payload;
-            const nextState = [...state.dead];
+            const nextState = [...state];
             
             nextState[row][col] = !nextState[row][col];
-            return {
-                ...state,
-                dead: nextState,
-            }
+            return [...nextState]
 
-        case types.GRID_SET_DEAD_ARRAY:
-            return {
-                ...state,
-                dead: payload
-            }
+        case types.GRID_SET_ALIVE_ARRAY:
+            return [...payload]
         default:
             return state;
     }
