@@ -63,7 +63,8 @@ function arrayClone( arr ) {
         }
         return copy;
     } else if( typeof arr === 'object' ) {
-        throw {'Cannot clone array containing an object!'};
+        // eslint-disable-next-line no-throw-literal
+        throw 'Cannot clone array containing an object!';
     } else {
         return arr;
     }

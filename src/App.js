@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import worker from 'workerize-loader!./workers/worker';
