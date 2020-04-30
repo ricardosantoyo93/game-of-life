@@ -123,8 +123,8 @@ class App extends Component {
     let rowVal = this.rowsRef.current.value !== "" ? this.rowsRef.current.value : 1;
     let colVal = this.colsRef.current.value !== "" ? this.colsRef.current.value : 1;
 
-    if(rowVal > 50 || colVal > 50) {
-      alert('Maximum value of 50');
+    if(rowVal > 40 || colVal > 50) {
+      alert('Max dimensions: 40x50');
       return
     }
 

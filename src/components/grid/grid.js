@@ -97,14 +97,15 @@ const Grid = ({ run, toggleRun , grid, worker, setNewGrid }) => {
     }
 
     return (
-        <>
+        <>  
+            <br />
             <Container className={"container"} rows={rows} cols={cols}>
                 { items }
             </Container>
             <br />
             <span>
-                <Button onClick={ () => start ? stopExecution() : startExecution() } stop={run} >{start ? 'Stop' : 'Start'}</Button>
                 <Random onClick={ () => randomizeCells()} disabled={run} >Randomize</Random>
+                <Button onClick={ () => start ? stopExecution() : startExecution() } stop={run} >{start ? 'Stop' : 'Start'}</Button>
             </span>
         </>
     )
