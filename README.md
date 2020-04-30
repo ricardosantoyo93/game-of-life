@@ -16,9 +16,17 @@ First install all the needed packages
 
 ### `npm install`
 
-Then, to run the project
+To run the client and server
+
+### `npm run dev`
+
+To only run the client
 
 ### `npm start`
+
+To only run the server
+
+### `npm run server`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
