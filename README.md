@@ -12,21 +12,20 @@ The game is a zero-player game, meaning that its evolution is determined by its 
 
 ## Running the project
 
-First install all the needed packages
-
 ### `npm install`
 
-To run the client and server
+To install all the packages
 
 ### `npm run dev`
 
-To only run the client
+To run the client and server
 
 ### `npm start`
 
-To only run the server
+To only run the client
 
 ### `npm run server`
 
-Runs the app in the development mode.<br />
+To only run the server
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
