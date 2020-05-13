@@ -3,6 +3,8 @@ React JS approach of Conway's Game of Life.
 
 The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves.
 
+Go to its [Wikipedia Page](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) for more info about it.
+
 ## Rules
 
 1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
