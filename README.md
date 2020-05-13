@@ -10,6 +10,15 @@ The game is a zero-player game, meaning that its evolution is determined by its 
 3. Any live cell with more than three live neighbours dies, as if by overpopulation.
 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
+## Playing the game
+
+1. After installing all the packages, run the project with `npm run dev` and open it in the browser (localhost:3000)
+2. Select the dimensions for the grid; you can set custom ones, select a default one, or click on Random.
+3. Select the initial set of living cells; You can (un)select each cell individually or click on Randomize to fill the grid with random cells (Recommended)
+4. Press START and watch the cells evolve.
+
+Pro-tip: you can stop the execution at any moment clicking on STOP, then change the current set of cells if you want, and restart the execution clicking on START again.
+
 ## Running the project
 
 ### `npm install`
