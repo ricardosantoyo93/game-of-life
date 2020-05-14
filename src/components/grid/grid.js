@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
+
+import worker from 'workerize-loader!../../workers/worker';
 
 import { Item } from './item';
 import gridActions from './actions';
 import coreActions from '../actions';
+
+const workerInstance = worker();
 
 const Container = styled.div`
         display: grid;
@@ -54,7 +58,7 @@ const Random = styled.button`
   }
 `
 
-const Grid = ({ run, toggleRun , grid, worker, setNewGrid }) => {
+const Grid = ({ run, toggleRun , grid, setNewGrid }) => {
     const items = [];
     const rows = grid.length;
     const cols = grid[0].length;
@@ -72,13 +76,13 @@ const Grid = ({ run, toggleRun , grid, worker, setNewGrid }) => {
     const startExecution = () => {
         setStart(!start);
         toggleRun();
-        worker.calculateNewGrid(grid);
+        workerInstance.calculateNewGrid(grid);
     }
 
     const stopExecution = () => {
         setStart(!start);
         toggleRun();
-        worker.stopWorker()
+        workerInstance.stopWorker()
     }
 
     const randomizeCells = () => {
@@ -95,6 +99,26 @@ const Grid = ({ run, toggleRun , grid, worker, setNewGrid }) => {
 
         setNewGrid(items);
     }
+
+    const initEventListener = useCallback(() => {
+        workerInstance.addEventListener('message', ({ data }) => {
+            const { method, grid } = data;
+            switch(method) {
+              case 'update-grid':
+                setNewGrid(grid);
+                break;
+              case 'worker-stopped':
+                console.log(`%c Worker was stopped`, 'color: yellow; font-size: bold;');
+                break;
+              default:
+                break;
+            }
+          });
+     }, [setNewGrid]);
+
+    useEffect(() => {
+        initEventListener();
+    }, [initEventListener]);
 
     return (
         <>  

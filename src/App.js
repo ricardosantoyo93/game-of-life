@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import worker from 'workerize-loader!./workers/worker';
 
 import { Grid } from './components';
 import gridActions from './components/grid/actions';
 
 import './App.css';
-
-const workerInstance = worker();
 
 const Button = styled.button`
   background: #088;
@@ -72,22 +68,6 @@ class App extends Component {
       cols: 0,
       render: false
     };
-  }
-
-  componentDidMount() {
-    workerInstance.addEventListener('message', ({ data }) => {
-      const { method, grid } = data;
-      switch(method) {
-        case 'update-grid':
-          this.props.setNewGrid(grid);
-          break;
-        case 'worker-stopped':
-          console.log(`%c Worker was stopped`, 'color: yellow; font-size: bold;');
-          break;
-        default:
-          break;
-      }
-    });
   }
 
   /**
@@ -177,7 +157,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-container">
-          { this.state.render ? <Grid worker={ workerInstance } /> : message}
+          { this.state.render ? <Grid /> : message}
           <br />
           <span>
             <Input disabled={run} ref={this.rowsRef} type={"number"} min={"1"} max={"50"} placeholder={"Rows"} /> 
