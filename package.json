@@ -27,10 +27,7 @@
     "dev": "run-p server start"
   },
   "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "import/no-webpack-loader-syntax": "off"
-    }
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
