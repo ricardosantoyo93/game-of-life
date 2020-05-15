@@ -57,7 +57,7 @@ const Input = styled.input`
 /**
  * Main component
  */
-class App extends Component {
+export class App extends Component {
   constructor() {
     super();
 

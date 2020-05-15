@@ -29,6 +29,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^workerize-loader!(.*)/workers(.*)":"<rootDir>/src/__mocks__/mock.worker.js"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -44,6 +49,8 @@
   "devDependencies": {
     "babel-plugin-styled-components": "^1.10.7",
     "body-parser": "^1.19.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "express": "^4.17.1",
     "express-pino-logger": "^5.0.0",
     "node-env-run": "^3.0.2",

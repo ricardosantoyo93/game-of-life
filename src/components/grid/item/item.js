@@ -29,7 +29,7 @@ const Cell = styled.div`
  * @param {Array<Array<Boolean>>} props.aliveArray A matrix of boolean values for each cell
  * @param {Function} props.toggleCell Action to toggle the value of an specific cell
  */
-const Item = ({ options, aliveArray, toggleCell, run }) => {
+export const Item = ({ options, aliveArray, toggleCell, run }) => {
     const { row, col } = options;
     const [alive, setAlive] = useState(aliveArray[row][col]);
 
